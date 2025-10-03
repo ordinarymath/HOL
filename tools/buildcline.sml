@@ -125,6 +125,8 @@ fun setKname k =
 val cline_opt_descrs = [
   {help = "build with experimental kernel", long = ["expk"], short = "",
    desc = setKname "--expk"},
+  {help = "build with debrujin kernel", long = ["debrujin"], short = "",
+   desc = setKname "--debrujin"},
   {help = "build a theory dependency graph", long = ["graph"], short = "",
    desc = mkBoolOpt #build_theory_graph true},
   {help = "build with full sequence", long = ["fullbuild"], short = "F",

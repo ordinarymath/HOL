@@ -103,6 +103,7 @@ fun read_buildsequence {kernelname} bseq_fname = let
     case kernelname of
         "stdknl" => "0"
       | "expk" => "experimental-kernel"
+      | "debrujin" => "db_kernel"
       | "otknl" => "0"
       | _ => die ("Bad kernelname: "^kernelname)
     ]
@@ -344,12 +345,12 @@ fun get_cline () = let
           SOME s => String.extract(s,2,NONE)
         | NONE =>
           (case
-              List.find (fn s => mem s ["--expk", "--otknl", "--stdknl"])oldopts
+              List.find (fn s => mem s ["--expk","--debrujin","--otknl", "--stdknl"])oldopts
              of
                 NONE => "stdknl"
               | SOME s =>
                 (warn ("Using kernel spec "^s^ " from earlier build command;\n\
-                       \    use one of --expk, --stdknl, --otknl to override");
+                       \    use one of --expk, --debrujin, --stdknl, --otknl to override");
                  String.extract(s,2,NONE)))
   val _ = write_kernelid knlspec
   val buildgraph =
@@ -909,6 +910,7 @@ fun process_cline () =
               val alldirs =
                   Binaryset.empty cmp |> add "stdknl" dfltbuildseq
                                       |> add "expk" knlseq
+                                      |> add "debrujin" knlseq
                                       |> add "otknl" knlseq
             in
               Binaryset.listItems alldirs
