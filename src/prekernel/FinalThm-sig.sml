@@ -5,6 +5,7 @@ sig
   type term
   type hol_type
   type 'a set   = 'a HOLset.set
+  type ('a,'b) dict = ('a,'b) HOLdict.dict
   type depdisk  = (string * int) * ((string * int list) list)
 
   val kernelid : string
@@ -18,6 +19,7 @@ sig
   val dest_thm      : thm -> term list * term
   val thm_frees     : thm -> term list
   val hyp_frees     : thm -> term set
+  val hyp_freevarmap : thm -> (string, hol_type list) dict -> (string, hol_type list) dict
   val hyp_tyvars    : thm -> hol_type set
 
 

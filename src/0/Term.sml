@@ -269,6 +269,21 @@ fun FVL [] A = A
   | FVL (_::rst) A                = FVL rst A
 
 
+val empty_varmap : (string, hol_type list) dict = HOLdict.mkDict(String.compare)
+(*---------------------------------------------------------------------------
+        Free varset of a term. Tail recursive.
+        Returns a (string, hol_type list) dict.
+ ---------------------------------------------------------------------------*)
+local
+fun insert name ty A = HOLdict.insertWith (flip (op @)) (A,name,[ty])
+in
+fun freevarmap [] A = A
+  | freevarmap ((Fv(name,ty))::rst) A = freevarmap rst (insert name ty A)
+  | freevarmap ((Comb(Rator,Rand))::rst) A = freevarmap (Rator::Rand::rst) A
+  | freevarmap ((Abs(_,Body))::rst) A = freevarmap (Body::rst) A
+  | freevarmap ((t as Clos _)::rst) A = freevarmap (push_clos t::rst) A
+  | freevarmap (_::rst) A = freevarmap rst A
+end
 (* ----------------------------------------------------------------------
     free_in tm M : does tm occur free in M?
    ---------------------------------------------------------------------- *)

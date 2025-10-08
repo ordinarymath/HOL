@@ -149,6 +149,9 @@ fun hyp_tyvars th =
 fun hyp_frees th =
   HOLset.foldl (fn (h,tms) => Term.FVL[h] tms) empty_tmset (hypset th);
 
+fun hyp_freevarmap th A =
+  HOLset.foldl (fn (h,tms) => Term.freevarmap [h] tms) A (hypset th);
+
 fun is_bool tm = (type_of tm = bool);
 
 

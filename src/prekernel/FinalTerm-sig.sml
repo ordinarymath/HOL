@@ -5,6 +5,7 @@ sig
   eqtype hol_type
   type ('a,'b)subst = ('a,'b)Lib.subst
   type 'a set       = 'a HOLset.set
+  type ('a,'b) dict = ('a,'b) HOLdict.dict
 
   val equality      : term
 
@@ -12,6 +13,7 @@ sig
   val free_vars     : term -> term list
   val free_vars_lr  : term -> term list
   val FVL           : term list -> term set -> term set
+  val freevarmap    : term list -> (string, hol_type list) dict -> (string, hol_type list) dict
   val free_in       : term -> term -> bool
   val all_vars      : term -> term list
   val all_atoms     : term -> term set
@@ -83,6 +85,7 @@ sig
   val fast_term_eq  : term -> term -> bool
 
   val empty_tmset   : term set
+  val empty_varmap  : (string, hol_type list) dict
   val empty_varset  : term set
 
   val term_size     : term -> int
