@@ -456,14 +456,25 @@ fun RIGHT_BETA th =
  *  "(\x1 ... xn.t)t1 ... tn" -->                                            *
  *    |- (\x1 ... xn.t)t1 ... tn = t[t1/x1] ... [tn/xn]                      *
  *---------------------------------------------------------------------------*)
-
+local
+fun LAZY_LIST_BETA_CONV tm =
+   let
+      val (Rator, Rand) = dest_comb tm
+   in
+      Beta (AP_THM (LAZY_LIST_BETA_CONV Rator) Rand)
+   end
+   handle HOL_ERR _ => REFL tm
+in
+(*Use explicit subtitutions via Thm.Beta for all but the final one uses
+  BETA_CONV which will evaluate all the remaining subtitutions*)
 fun LIST_BETA_CONV tm =
    let
       val (Rator, Rand) = dest_comb tm
    in
-      RIGHT_BETA (AP_THM (LIST_BETA_CONV Rator) Rand)
+      RIGHT_BETA (AP_THM (LAZY_LIST_BETA_CONV Rator) Rand)
    end
    handle HOL_ERR _ => REFL tm
+end
 
 fun RIGHT_LIST_BETA th = TRANS th (LIST_BETA_CONV (rhs (concl th)))
 
