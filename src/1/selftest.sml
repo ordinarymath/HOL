@@ -1418,3 +1418,15 @@ in
     (VALID (EQ_MP_TAC th))
     ([], t)
 end;
+
+val _ = let
+  val _ = tprint "SPEC_ALL"
+  val th =  CONJ (ASSUME “!b. a”) (ASSUME “! a a' a''. a /\ a' /\ a''”)
+  val th = CONJUNCT2 th
+in
+require_msg
+(check_result (aconv “a' /\ a'' /\ a'''”))
+ term_to_string
+ (concl o SPEC_ALL)
+ th
+end

@@ -797,7 +797,13 @@ fun UNDISCH_ALL th = if is_imp (concl th) then UNDISCH_ALL (UNDISCH th) else th
  * --------------------------------------------------------------------------*)
 
 local
-   fun varyAcc v (V, l) = let val v' = prim_variant V v in (v'::V, v'::l) end
+   fun variants [] V = []
+     | variants (v::vs) V =
+       let
+          val v' = prim_variant V v
+       in
+          v' :: variants (vs) (v'::V)
+       end
 in
    fun SPEC_ALL th =
       if is_forall (concl th) then
@@ -805,8 +811,9 @@ in
             val (hvs, con) = (HOLset.listItems ## I) (hyp_frees th, concl th)
             val fvs = HOLset.listItems (FVL [con] empty_tmset)
             val vars = fst (strip_forall con)
+            val vars' = variants vars (hvs @ fvs)
          in
-            SPECL (snd (itlist varyAcc vars (hvs @ fvs, []))) th
+            SPECL vars' th
          end
       else th
 end
